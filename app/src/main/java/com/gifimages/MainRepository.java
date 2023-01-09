@@ -33,7 +33,7 @@ public class MainRepository {
                 .create(GifSearchService.class);
     }
 
-    public void searchGifs(String apiKey, String limit, String query) {
+    public LiveData<List<String>> searchGifs(String apiKey, String limit, String query) {
         gifSearchService.searchVolumes(apiKey, limit, query)
                 .enqueue(new Callback<Data>() {
                     @Override
@@ -41,7 +41,7 @@ public class MainRepository {
                         if (response.body() != null) {
                             returnList.clear();
                             for (int count = 0; count < response.body().getData().size(); count++) {
-                                returnList.add(response.body().getData().get(count).getImages().getOriginal().getUrl());
+                                setList(response.body().getData().get(count).getImages().getOriginal().getUrl());
                             }
                             volumesResponseLiveData.postValue(returnList);
                         }
@@ -52,6 +52,13 @@ public class MainRepository {
                         volumesResponseLiveData.postValue(null);
                     }
                 });
+        return volumesResponseLiveData;
+    }
+
+    public void setList(String setUrl) {
+        if (setUrl != null) {
+            returnList.add(setUrl);
+        }
     }
 
     public LiveData<List<String>> getVolumesResponseLiveData() {

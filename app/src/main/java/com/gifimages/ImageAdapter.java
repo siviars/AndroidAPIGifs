@@ -4,43 +4,85 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class ImageAdapter extends BaseAdapter {
+public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
+    private List<String> gifUrlList;
+
     Context context;
-    List<String> pictures;
-    LayoutInflater inflter;
 
-    public ImageAdapter(Context applicationContext, List<String> pictures) {
-        this.context = applicationContext;
-        this.pictures = pictures;
-        inflter = (LayoutInflater.from(applicationContext));
+    public ImageAdapter(Context applicationContext, List<String> itemList) {
+        context = applicationContext;
+        gifUrlList = itemList;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_ITEM) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_listview, parent, false);
+            return new ItemViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_loading, parent, false);
+            return new LoadingviewHolder(view);
+        }
     }
 
     @Override
-    public int getCount() {
-        return pictures.size();
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ItemViewHolder) {
+            populateItemRows((ItemViewHolder) holder, position);
+        } else if (holder instanceof LoadingviewHolder) {
+            showLoadingView((LoadingviewHolder) holder, position);
+        }
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public int getItemCount() {
+        if (gifUrlList == null) {
+            return 0;
+        } else {
+            return gifUrlList.size();
+        }
     }
 
-    @Override
-    public long getItemId(int i) {
-        return 0;
+    public int getItemViewType(int position) {
+        if (gifUrlList.get(position) == null) {
+            return VIEW_TYPE_LOADING;
+        } else {
+            return VIEW_TYPE_ITEM;
+        }
     }
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        view = inflter.inflate(R.layout.activity_listview, null);
-        ImageView icon = (ImageView) view.findViewById(R.id.gifView);
-        Glide.with(context).load(pictures.get(i)).into(icon);
-        return view;
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
+        ImageView gifView;
+        public ItemViewHolder(@NonNull View itemView) {
+            super(itemView);
+            gifView = itemView.findViewById(R.id.gifView);
+        }
+    }
+
+    private class LoadingviewHolder extends RecyclerView.ViewHolder {
+        ProgressBar progressBar;
+        public LoadingviewHolder(@NonNull View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.progressbar);
+        }
+    }
+
+    private void showLoadingView(LoadingviewHolder viewHolder, int position) {
+    }
+
+    private void populateItemRows(ItemViewHolder viewHolder, int position) {
+        String item = gifUrlList.get(position);
+        Glide.with(context).load(item).into(viewHolder.gifView);
     }
 }

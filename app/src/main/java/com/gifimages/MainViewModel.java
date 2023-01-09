@@ -10,7 +10,7 @@ public class MainViewModel extends ViewModel {
     private MainRepository mainRepository;
     private LiveData<List<String>> volumesResponseLiveData;
     private final String apiKey = "h18h8Fk5bL7NPhHZwzKTQvjIZl68yHPO";
-    private final String limit = "25";
+    private final String limit = "50";
 
     public MainViewModel() {
         mainRepository = new MainRepository();
@@ -22,8 +22,8 @@ public class MainViewModel extends ViewModel {
         super.onCleared();
     }
 
-    public void searchGifs(String query) {
-        mainRepository.searchGifs(apiKey, limit, query);
+    public LiveData<List<String>> searchGifs(String query) {
+        return mainRepository.searchGifs(apiKey, limit, query);
     }
 
     public LiveData<List<String>> getVolumesResponseLiveData() {
