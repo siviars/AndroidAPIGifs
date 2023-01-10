@@ -7,14 +7,15 @@ import java.util.List;
 
 public class MainViewModel extends ViewModel {
 
+    GifSearchService gifSearchService;
     private MainRepository mainRepository;
     private LiveData<List<String>> volumesResponseLiveData;
     private final String apiKey = "h18h8Fk5bL7NPhHZwzKTQvjIZl68yHPO";
     private final String limit = "50";
 
-    public MainViewModel() {
-        mainRepository = new MainRepository();
-        volumesResponseLiveData = mainRepository.getVolumesResponseLiveData();
+    public MainViewModel(MainRepository mainRepository) {
+        this.mainRepository = mainRepository;
+        volumesResponseLiveData = this.mainRepository.getVolumesResponseLiveData();
     }
 
     @Override

@@ -9,15 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String GIF_SERVICE_BASE = "https://api.giphy.com/";
     EditText searchText;
     RecyclerView recyclerView;
     ImageAdapter imageAdapter;
@@ -30,7 +33,18 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        GifSearchService gifSearchService = new retrofit2.Retrofit.Builder().
+                baseUrl(GIF_SERVICE_BASE).
+                client(client).addConverterFactory(GsonConverterFactory.create()).
+                build().create(GifSearchService.class);
+        MainRepository mainRepository = new MainRepository(gifSearchService);
+        mainViewModel = new MainViewModel(mainRepository);
+
+        //mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         searchText = findViewById(R.id.name_et);
         recyclerView = findViewById(R.id.recyclerView);
