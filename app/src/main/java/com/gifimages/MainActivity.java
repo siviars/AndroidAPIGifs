@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         MainRepository mainRepository = new MainRepository(gifSearchService);
         mainViewModel = new MainViewModel(mainRepository);
 
-        //mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         searchText = findViewById(R.id.name_et);
         recyclerView = findViewById(R.id.recyclerView);

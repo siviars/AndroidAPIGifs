@@ -21,7 +21,6 @@ public class MainRepository {
     private List<String> returnList = new ArrayList<>();
 
 
-
     public MainRepository(GifSearchService gifSearchService) {
         volumesResponseLiveData = new MutableLiveData<>();
         this.gifSearchService = gifSearchService;
