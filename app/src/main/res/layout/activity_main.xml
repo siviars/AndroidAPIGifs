@@ -9,10 +9,12 @@
         tools:context=".MainActivity"
         app:layoutDescription="@xml/activity_main_scene">
 
-     <EditText
-            android:layout_width="wrap_content"
+    <EditText
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter gif name"
+            android:maxLength="30"
+            android:singleLine="true"
             android:id="@+id/name_et"/>
 
     <androidx.recyclerview.widget.RecyclerView

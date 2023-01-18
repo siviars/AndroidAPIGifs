@@ -13,9 +13,9 @@ public class MainViewModel extends ViewModel {
     private final String apiKey = "h18h8Fk5bL7NPhHZwzKTQvjIZl68yHPO";
     private final String limit = "50";
 
-    public MainViewModel(MainRepository mainRepository) {
-        this.mainRepository = mainRepository;
-        volumesResponseLiveData = this.mainRepository.getVolumesResponseLiveData();
+    public MainViewModel() {
+        mainRepository = new MainRepository();
+        volumesResponseLiveData = mainRepository.getVolumesResponseLiveData();
     }
 
     @Override
