@@ -6,13 +6,13 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.gifimages"
         minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_KEY", "\"h18h8Fk5bL7NPhHZwzKTQvjIZl68yHPO\"")
+
     }
 
     buildTypes {
@@ -30,6 +30,7 @@ android {
             resources.srcDirs += ['src/test/java/com/gifimages']
         }
     }
+
 }
 
 dependencies {
